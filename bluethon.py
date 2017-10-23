@@ -166,20 +166,20 @@ def wireshark_pipe():
     p2.communicate()
 
 
-def uber_follow(mode, addr=None):
+def uber_follow(mode, ubers, addr=None):
     time = time_string()
-    btle = time + "_btle.cap"
+    btle = time + "_btle.pcap"
 
     if mode == 'f' or mode == 'F': 
-        p1 = subprocess.Popen(["ubertooth-btle", "-f", "-c", btle], stdout = sys.stdout)
+        p1 = subprocess.Popen(["ubertooth-btle", "-f", "-c", btle, "-U" + ubers], stdout = sys.stdout)
         p1.communicate()
 
     if mode == 'p' or mode == 'P':
-        p2 = subprocess.Popen(["ubertooth-btle", "-p", "-c", btle], stdout = sys.stdout)
+        p2 = subprocess.Popen(["ubertooth-btle", "-p", "-c", btle, "-U" + ubers], stdout = sys.stdout)
         p2.communicate()
 
     if mode == 's':
-        p3 = subprocess.Popen(["ubertooth-btle", "-f", "-t" + addr, "-c", btle], stdout = sys.stdout)
+        p3 = subprocess.Popen(["ubertooth-btle", "-f", "-t" + str(addr), "-c", btle, "-U" + ubers], stdout = sys.stdout)
         p3.communicate()
 
 
@@ -233,14 +233,17 @@ def main():
         wireshark_pipe()
 
     if selection == '3':
-        uber_follow('f')
+        ubers = raw_input("Enter the number of the Ubertooth(s) to use: ")
+        uber_follow('f', ubers)
 
     if selection == '4':
-        uber_follow('p')
+        ubers = raw_input("Enter the number of the Ubertooth(s) to use: ")
+        uber_follow('p', ubers)
 
     if selection == '5':
+        ubers = raw_input("Enter the number of the Ubertooth(s) to use: ")
         addr = raw_input("Enter the device address: ")
-        uber_follow('s', addr)
+        uber_follow('s', ubers, addr)
 
     if selection == '6':
         inp = raw_input("Enter the name of the input file: ")
